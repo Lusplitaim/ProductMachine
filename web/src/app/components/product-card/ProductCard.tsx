@@ -14,7 +14,7 @@ export default function ProductCard(props: { product: Product, selected: boolean
         selectBtnText = "Закончился";
         selectBtnClass = "is-light";
         selectBtnDisabled = true;
-    } else if (selected) {
+    } else if (!!selected) {
         selectBtnText = "Выбрано";
         selectBtnClass = "is-success";
     }
@@ -23,7 +23,7 @@ export default function ProductCard(props: { product: Product, selected: boolean
 
     function toggleSelected() {
         setSelected(prev => !prev);
-        props.onToggleStatus(props.product.id, selected);
+        props.onToggleStatus(props.product.id, !selected);
     }
 
     return (

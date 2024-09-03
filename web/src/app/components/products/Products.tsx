@@ -7,16 +7,16 @@ import { Link } from "react-router-dom";
 
 export default function Products() {
   const products: Product[] = [
-    { id: 1, name: "Pepsi", price: 85, quantity: 5, selected: false },
-    { id: 2, name: "Coca-Cola", price: 96, quantity: 4, selected: false },
-    { id: 3, name: "Sprite", price: 101, quantity: 1, selected: false },
-    { id: 4, name: "Fanta", price: 79, quantity: 2, selected: false },
-    { id: 5, name: "Mamba", price: 120, quantity: 0, selected: false },
+    { id: 1, name: "Pepsi", price: 85, maxQuantity: 5, selected: false, quantity: 1 },
+    { id: 2, name: "Coca-Cola", price: 96, maxQuantity: 4, selected: false, quantity: 1 },
+    { id: 3, name: "Sprite", price: 101, maxQuantity: 1, selected: false, quantity: 1 },
+    { id: 4, name: "Fanta", price: 79, maxQuantity: 2, selected: false, quantity: 1 },
+    { id: 5, name: "Mamba", price: 120, maxQuantity: 0, selected: false, quantity: 0 },
   ];
 
   const [selectedProducts, setSelectedProducts] = useState([] as Product[]);
 
-  const prodList = products.map(prod => <ProductCard product={prod} selected={true} onToggleStatus={toggleProductStatus} key={prod.id} />);
+  const prodList = products.map(prod => <ProductCard product={prod} selected={prod.selected} onToggleStatus={toggleProductStatus} key={prod.id} />);
 
   function toggleProductStatus(id: number, selected: boolean) {
     const prod = products.find(prod => prod.id === id);
@@ -45,7 +45,7 @@ export default function Products() {
         <button className="button is-info"><Link to={`basket`}>Выбрано: {selectedProducts.length}</Link></button>
       </section>
       <hr />
-      <div className="container flex flex-row flex-wrap gap-x-10 scroll-smooth">
+      <div className="container flex flex-row flex-wrap gap-x-10 scroll-smooth my-10">
         {prodList}
       </div>
     </div>

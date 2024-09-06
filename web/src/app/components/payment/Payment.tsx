@@ -17,7 +17,7 @@ export default function Payment() {
                     <h3>{coin.nominal} руб.</h3>
                 </td>
                 <td>
-                    <NumberInput defaultValue={coin.quantity} maxValue={coin.maxQuantity} />
+                    <NumberInput defaultValue={coin.quantity ?? 0} maxValue={coin.maxQuantity} minValue={0} />
                 </td>
                 <td className="text-center">
                     {coin.nominal * coin.quantity} руб.

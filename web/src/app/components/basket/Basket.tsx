@@ -2,33 +2,61 @@ import { Product } from "@/models/product";
 import Image from "next/image";
 import NumberInput from "../number-input/NumberInput";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { useImmer } from "use-immer";
 
 export default function Basket() {
-    const products: Product[] = [
-        { id: 1, name: "Pepsi", price: 85, maxQuantity: 5, selected: false, quantity: 1 },
-        { id: 2, name: "Coca-Cola", price: 96, maxQuantity: 4, selected: false, quantity: 1 },
-        { id: 3, name: "Sprite", price: 101, maxQuantity: 1, selected: false, quantity: 1 },
-        { id: 4, name: "Fanta", price: 79, maxQuantity: 2, selected: false, quantity: 1 },
-    ];
+    const [products, setProducts] = useImmer([] as Product[]);
+
+    useEffect(() => {
+        setProducts(JSON.parse(getSelectedItems()));
+    }, []);
+
+    function getSelectedItems(): string {
+        return localStorage.getItem('selectedProducts') ?? '';
+    }
+
+    function updateProductQuantity(productId: number) {
+        return (val: number) => {
+            setProducts(prods => {
+                const prod = prods.find(p => p.id === productId)!;
+                prod.quantity = val;
+            });
+        };
+    }
 
     const productsTableData = products.map(p => {
         return (
             <tr key={p.id}>
-                <td className="flex flex-row gap-2">
-                    <figure className="image">
-                        <Image src="/coca-cola.jpeg" width={100} height={150} alt="image" />
-                    </figure>
-                    <h3>{p.name}</h3>
+                <td>
+                    <div className="flex flex-row gap-2 items-center">
+                        <figure className="image">
+                            <Image src="/coca-cola.jpeg" width={100} height={150} alt="image" />
+                        </figure>
+                        <h3>{p.name}</h3>
+                    </div>
                 </td>
                 <td>
-                    <NumberInput defaultValue={p.quantity} maxValue={p.maxQuantity} />
+                    <div className="flex flex-col justify-center">
+                        <NumberInput value={p.quantity ?? 1} maxValue={p.maxQuantity} minValue={1} onChange={updateProductQuantity(p.id)} />
+                    </div>
                 </td>
-                <td className="text-center">
-                    {p.price}
+                <td>
+                    <p className="text-center">
+                        {p.price}
+                    </p>
                 </td>
             </tr>
         );
     });
+
+    function getTotalSum(): number {
+        let totalSum = 0;
+        for (const p of products) {
+            totalSum += p.price * (p.quantity ?? 1);
+        }
+        return totalSum;
+    }
 
     return (
         <div className="flex flex-col overflow-auto">
@@ -50,7 +78,7 @@ export default function Basket() {
             </table>
             <hr />
             <div className="flex flex-col h-24 container">
-                <h3 className="self-end">Итоговая сумма: </h3>
+                <h3 className="self-end">Итоговая сумма: {getTotalSum()}</h3>
                 <div className="flex">
                     <button className="button is-warning"><Link to="/">Вернуться</Link></button>
                     <div className="mx-auto"></div>

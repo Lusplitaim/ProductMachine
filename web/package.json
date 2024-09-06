@@ -9,11 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tanstack/react-table": "^8.20.5",
+    "axios": "^1.7.7",
     "bulma": "^1.0.2",
     "next": "14.2.7",
     "react": "^18",
     "react-dom": "^18",
-    "react-router-dom": "^6.26.1"
+    "react-router-dom": "^6.26.1",
+    "use-immer": "^0.10.0"
   },
   "devDependencies": {
     "@types/node": "^20",

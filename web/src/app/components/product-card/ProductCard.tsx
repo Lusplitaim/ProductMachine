@@ -10,11 +10,11 @@ export default function ProductCard(props: { product: Product, selected: boolean
     let selectBtnText = "Выбрать";
     let selectBtnClass = "is-warning";
     let selectBtnDisabled = false;
-    if (!prod.quantity) {
+    if (!prod.maxQuantity) {
         selectBtnText = "Закончился";
         selectBtnClass = "is-light";
         selectBtnDisabled = true;
-    } else if (!!selected) {
+    } else if (selected) {
         selectBtnText = "Выбрано";
         selectBtnClass = "is-success";
     }

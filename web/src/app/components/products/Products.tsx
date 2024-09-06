@@ -2,21 +2,37 @@
 
 import { Product } from "@/models/product";
 import ProductCard from "../product-card/ProductCard"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import brandsApi from "@/app/api/brands.api";
+import { Brand } from "@/models/brand";
+import productsApi from "@/app/api/products.api";
 
 export default function Products() {
-  const products: Product[] = [
-    { id: 1, name: "Pepsi", price: 85, maxQuantity: 5, selected: false, quantity: 1 },
-    { id: 2, name: "Coca-Cola", price: 96, maxQuantity: 4, selected: false, quantity: 1 },
-    { id: 3, name: "Sprite", price: 101, maxQuantity: 1, selected: false, quantity: 1 },
-    { id: 4, name: "Fanta", price: 79, maxQuantity: 2, selected: false, quantity: 1 },
-    { id: 5, name: "Mamba", price: 120, maxQuantity: 0, selected: false, quantity: 0 },
-  ];
+  useEffect(() => {
+    const getBrands = async () => {
+      const brands = await brandsApi.getBrands();
+
+      setBrands(brands);
+    };
+
+    const getProducts = async () => {
+      const products = await productsApi.getProducts();
+
+      setProducts(products);
+    };
+
+    getBrands();
+    getProducts();
+  }, []);
 
   const [selectedProducts, setSelectedProducts] = useState([] as Product[]);
+  const [brands, setBrands] = useState([] as Brand[]);
+  const [products, setProducts] = useState([] as Product[]);
 
   const prodList = products.map(prod => <ProductCard product={prod} selected={prod.selected} onToggleStatus={toggleProductStatus} key={prod.id} />);
+
+  const brandsList = brands.map(b => <option key={b.id}>{b.name}</option>);
 
   function toggleProductStatus(id: number, selected: boolean) {
     const prod = products.find(prod => prod.id === id);
@@ -27,22 +43,25 @@ export default function Products() {
     }
   }
 
+  function saveSelectedItems() {
+    localStorage.setItem('selectedProducts', JSON.stringify(selectedProducts));
+  }
+
   return (
     <div>
-      <section className="section flex flex-col">
+      <section className="container section flex flex-col">
         <h1 className="title">Газированные напитки</h1>
         <div className="flex flex-row justify-start">
           <div className="select is-link">
             <select>
-              <option>Все бренды</option>
-              <option>Pepsi</option>
+              {[<option key="0">Все бренды</option>, ...brandsList]}
             </select>
           </div>
           <div className="input is-link">
             <input type="range" min="0" max="100" />
           </div>
         </div>
-        <button className="button is-info"><Link to={`basket`}>Выбрано: {selectedProducts.length}</Link></button>
+        <button className="button is-info" disabled={!selectedProducts.length}><Link to={`basket`} onClick={saveSelectedItems}>Выбрано: {selectedProducts.length}</Link></button>
       </section>
       <hr />
       <div className="container flex flex-row flex-wrap gap-x-10 scroll-smooth my-10">

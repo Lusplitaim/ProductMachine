@@ -33,6 +33,13 @@ namespace ProductCatalog.Infrastructure.Data.Repositories
             return await products.ToListAsync();
         }
 
+        public async Task<ICollection<ProductEntity>> GetAsync(IEnumerable<int> ids)
+        {
+            return await m_DbContext.Products.Where(p => ids.Contains(p.Id))
+                .Include(p => p.Brand)
+                .ToListAsync();
+        }
+
         public async Task<ProductEntity?> GetAsync(int productId)
         {
             return await m_DbContext.Products.Include(p => p.Brand)

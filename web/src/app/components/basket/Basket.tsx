@@ -1,12 +1,13 @@
 import { Product } from "@/models/product";
 import Image from "next/image";
 import NumberInput from "../number-input/NumberInput";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useImmer } from "use-immer";
 
 export default function Basket() {
     const [products, setProducts] = useImmer([] as Product[]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         setProducts(JSON.parse(getSelectedItems()));
@@ -38,7 +39,7 @@ export default function Basket() {
                 </td>
                 <td>
                     <div className="flex flex-col justify-center">
-                        <NumberInput value={p.quantity ?? 1} maxValue={p.maxQuantity} minValue={1} onChange={updateProductQuantity(p.id)} />
+                        <NumberInput value={p.quantity ?? 0} maxValue={p.maxQuantity} minValue={0} onChange={updateProductQuantity(p.id)} />
                     </div>
                 </td>
                 <td>
@@ -53,9 +54,22 @@ export default function Basket() {
     function getTotalSum(): number {
         let totalSum = 0;
         for (const p of products) {
-            totalSum += p.price * (p.quantity ?? 1);
+            if (p.quantity) {
+                totalSum += p.price * p.quantity;
+            }
         }
         return totalSum;
+    }
+
+    function navigateToPayment() {
+        localStorage.setItem('totalSum', getTotalSum().toString());
+        localStorage.setItem('selectedProducts', JSON.stringify(products));
+
+        navigate('/payment');
+    }
+
+    function navigateBack() {
+        navigate('/');
     }
 
     return (
@@ -80,9 +94,9 @@ export default function Basket() {
             <div className="flex flex-col h-24 container">
                 <h3 className="self-end">Итоговая сумма: {getTotalSum()}</h3>
                 <div className="flex">
-                    <button className="button is-warning"><Link to="/">Вернуться</Link></button>
+                    <button className="button is-warning" onClick={navigateBack}>Вернуться</button>
                     <div className="mx-auto"></div>
-                    <button className="button is-success"><Link to="/payment">Оплата</Link></button>
+                    <button className="button is-success" disabled={getTotalSum() <= 0} onClick={navigateToPayment}>Оплата</button>
                 </div>
             </div>
         </div>

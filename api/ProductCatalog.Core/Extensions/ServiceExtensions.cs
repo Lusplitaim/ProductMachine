@@ -17,6 +17,7 @@ namespace ProductCatalog.Core.Extensions
             services.AddScoped<IProductBrandService, ProductBrandService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<ICoinService, CoinService>();
 
             services.AddScoped<IProductBrandStorage, ProductBrandStorage>();
             services.AddScoped<IProductStorage, ProductStorage>();

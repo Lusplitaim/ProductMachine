@@ -16,5 +16,11 @@ namespace ProductCatalog.Infrastructure.Data.Repositories
         {
             return await m_DbContext.Coins.ToListAsync();
         }
+
+        public async Task<ICollection<CoinEntity>> GetAsync(IEnumerable<int> nominals)
+        {
+            return await m_DbContext.Coins.Where(c => nominals.Contains(c.Nominal))
+                .ToListAsync();
+        }
     }
 }

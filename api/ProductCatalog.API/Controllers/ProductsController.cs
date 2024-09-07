@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NLog.Filters;
 using ProductCatalog.Core.DTOs.Product;
 using ProductCatalog.Core.Extensions;
 using ProductCatalog.Core.Models;

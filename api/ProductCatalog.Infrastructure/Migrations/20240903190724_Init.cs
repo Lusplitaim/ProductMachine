@@ -15,8 +15,7 @@ namespace ProductCatalog.Infrastructure.Migrations
                 name: "Coins",
                 columns: table => new
                 {
-                    Nominal = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nominal = table.Column<int>(type: "int", nullable: false),
                     MaxQuantity = table.Column<int>(type: "int", nullable: false, defaultValue: 0)
                 },
                 constraints: table =>

@@ -1,6 +1,7 @@
 ﻿using ProductCatalog.Core.Data;
 using ProductCatalog.Core.DTOs.Order;
 using ProductCatalog.Core.Exceptions;
+using ProductCatalog.Core.Models;
 using ProductCatalog.Core.Storages;
 
 namespace ProductCatalog.Core.Services
@@ -15,6 +16,27 @@ namespace ProductCatalog.Core.Services
             m_OrderStorage = orderStorage;
         }
 
+        public async Task<ExecResult> CreateAsync(CreateOrderDto model)
+        {
+            try
+            {
+                var result = new ExecResult();
+
+                using var transaction = m_UnitOfWork.BeginTransaction();
+
+                var createResult = await m_OrderStorage.CreateAsync(model);
+                result.AddErrors(createResult);
+
+                transaction.Commit();
+
+                return result;
+            }
+            catch (Exception ex) when (ex is not RestCoreException)
+            {
+                throw new Exception("Failed to create product", ex);
+            }
+        }
+
         public async Task<ICollection<OrderDto>> GetAsync()
         {
             try
@@ -27,23 +49,5 @@ namespace ProductCatalog.Core.Services
                 throw new Exception("Failed to get products", ex);
             }
         }
-
-        /*public async Task<ExecResult<ProductDto>> CreateAsync(CreateOrderDto model)
-        {
-            try
-            {
-                using var transaction = m_UnitOfWork.BeginTransaction();
-
-                var result = await m_ProductStorage.CreateAsync(model);
-
-                transaction.Commit();
-
-                return result;
-            }
-            catch (Exception ex) when (ex is not RestCoreException)
-            {
-                throw new Exception("Failed to create product", ex);
-            }
-        }*/
     }
 }

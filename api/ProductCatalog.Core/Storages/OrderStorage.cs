@@ -1,6 +1,7 @@
 ﻿using ProductCatalog.Core.Data;
 using ProductCatalog.Core.Models;
 using ProductCatalog.Core.DTOs.Order;
+using ProductCatalog.Core.Storages.Managers;
 
 namespace ProductCatalog.Core.Storages
 {
@@ -19,24 +20,45 @@ namespace ProductCatalog.Core.Storages
             return entities.Select(OrderDto.From).ToList();
         }
 
-        public Task<ExecResult<OrderDto>> CreateAsync(CreateOrderDto model)
+        public async Task<ExecResult<CreateOrderResult>> CreateAsync(CreateOrderDto model)
         {
-            var result = new ExecResult<OrderDto>();
+            var result = new ExecResult<CreateOrderResult>();
 
-            /*ProductEntity entity = new()
+            var ids = model.Products.Select(p => p.Id).ToList();
+            var products = await m_UnitOfWork.ProductRepository.GetAsync(ids);
+            if (!products.All(p => ids.Contains(p.Id)))
             {
-                Name = model.Name,
-                Price = model.Price,
-            };
+                result.AddError("Some products do not exist");
+                return result;
+            }
 
-            await m_UnitOfWork.ProductRepository.CreateAsync(entity);
+            var coinNominals = model.Coins.Select(c => c.Nominal).ToList();
+            var coins = await m_UnitOfWork.CoinRepository.GetAsync(coinNominals);
+            if (!coins.All(c => coinNominals.Contains(c.Nominal)))
+            {
+                result.AddError("Some products do not exist");
+                return result;
+            }
+
+            var context = new CreateOrderContext();
+            context.OrderedProducts = model.Products;
+            context.InsertedCoins = model.Coins;
+            context.Coins = coins;
+            context.Products = products;
+
+            var atmManager = new AtmManager();
+            var createResult = await atmManager.CreateOrderAsync(m_UnitOfWork, context);
+            if (!createResult.Succeeded)
+            {
+                result.AddErrors(createResult);
+                return result;
+            }
 
             await m_UnitOfWork.SaveAsync();
 
-            var updated = await GetAsync(entity.Id);
-            result.Result = updated;*/
+            result.Result = createResult.Result;
 
-            return Task.FromResult(result);
+            return result;
         }
     }
 }

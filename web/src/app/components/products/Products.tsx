@@ -3,7 +3,7 @@
 import { Product } from "@/models/product";
 import ProductCard from "../product-card/ProductCard"
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import brandsApi from "@/app/api/brands.api";
 import { Brand } from "@/models/brand";
 import productsApi from "@/app/api/products.api";
@@ -29,6 +29,7 @@ export default function Products() {
   const [selectedProducts, setSelectedProducts] = useState([] as Product[]);
   const [brands, setBrands] = useState([] as Brand[]);
   const [products, setProducts] = useState([] as Product[]);
+  const navigate = useNavigate();
 
   const prodList = products.map(prod => <ProductCard product={prod} selected={prod.selected} onToggleStatus={toggleProductStatus} key={prod.id} />);
 
@@ -43,8 +44,9 @@ export default function Products() {
     }
   }
 
-  function saveSelectedItems() {
+  function navigateToBasket() {
     localStorage.setItem('selectedProducts', JSON.stringify(selectedProducts));
+    navigate('basket');
   }
 
   return (
@@ -61,7 +63,7 @@ export default function Products() {
             <input type="range" min="0" max="100" />
           </div>
         </div>
-        <button className="button is-info" disabled={!selectedProducts.length}><Link to={`basket`} onClick={saveSelectedItems}>Выбрано: {selectedProducts.length}</Link></button>
+        <button className="button is-info" disabled={!selectedProducts.length} onClick={navigateToBasket}>Выбрано: {selectedProducts.length}</button>
       </section>
       <hr />
       <div className="container flex flex-row flex-wrap gap-x-10 scroll-smooth my-10">

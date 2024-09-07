@@ -1,7 +1,11 @@
-﻿namespace ProductCatalog.Core.DTOs.Order
+﻿using ProductCatalog.Core.DTOs.Coin;
+using ProductCatalog.Core.DTOs.Product;
+
+namespace ProductCatalog.Core.DTOs.Order
 {
     public class CreateOrderDto
     {
-        public ICollection<int> Products { get; set; } = [];
+        public ICollection<OrderProductDto> Products { get; set; } = [];
+        public ICollection<InsertedCoinDto> Coins { get; set; } = [];
     }
 }

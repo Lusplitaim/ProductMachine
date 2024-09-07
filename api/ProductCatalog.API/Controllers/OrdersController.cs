@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ProductCatalog.Core.DTOs.Order;
+using ProductCatalog.Core.Extensions;
 using ProductCatalog.Core.Services;
 
 namespace ProductCatalog.API.Controllers
@@ -18,11 +20,11 @@ namespace ProductCatalog.API.Controllers
             return Ok(result);
         }
 
-        /*[HttpPost]
+        [HttpPost]
         public async Task<IActionResult> CreateOrder(CreateOrderDto model)
         {
             var result = await m_OrderService.CreateAsync(model);
-            return this.ResolveResult(result, () => Created(nameof(CreateCategory), result.Result));
-        }*/
+            return this.ResolveResult(result, () => Created(nameof(CreateOrder), null));
+        }
     }
 }

@@ -49,7 +49,7 @@ export default function Payment() {
                     <h3>{coin.nominal} руб.</h3>
                 </td>
                 <td>
-                    <NumberInput value={coin.quantity ?? 0} maxValue={coin.maxQuantity} minValue={0} onChange={updateCoinQuantity(coin.nominal)} />
+                    <NumberInput value={coin.quantity ?? 0} minValue={0} onChange={updateCoinQuantity(coin.nominal)} />
                 </td>
                 <td className="text-center">
                     {coin.nominal * coin.quantity ?? 0} руб.
@@ -95,8 +95,8 @@ export default function Payment() {
             <hr />
             <div className="flex flex-col gap-3 h-24 container">
                 <div className="flex justify-end gap-6">
-                    <h3 className="self-end">Внесенная сумма: {getInsertedSum()}</h3>
                     <h3 className="self-end">Итоговая сумма: {totalSum}</h3>
+                    <h3 className="self-end">Внесенная сумма: <b className={getInsertedSum() >= totalSum ? 'has-text-success' : 'has-text-danger'}>{getInsertedSum()}</b></h3>
                 </div>
                 <div className="flex">
                     <button className="button is-warning is-medium" onClick={navigateBack}>Вернуться</button>

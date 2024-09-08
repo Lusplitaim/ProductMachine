@@ -1,4 +1,4 @@
-export default function NumberInput(props: { value: number, maxValue: number, minValue: number, onChange: (val: number) => void }) {
+export default function NumberInput(props: { value: number, maxValue?: number, minValue: number, onChange: (val: number) => void }) {
     function decrease() {
         const val = props.value;
         const result = val === props.minValue ? val : val - 1;

@@ -9,6 +9,7 @@ import { CreateOrderModel } from "@/models/createOrderModel";
 import { Product } from "@/models/product";
 import { OrderedProduct } from "@/models/orderedProduct";
 import { InsertedCoin } from "@/models/insertedCoin";
+import { Badge } from "../badge/Badge";
 
 export default function Payment() {
     const [coins, setCoins] = useImmer([] as Coin[]);
@@ -45,7 +46,8 @@ export default function Payment() {
     const coinsList = coins.map(coin => {
         return (
             <tr key={coin.nominal}>
-                <td className="flex justify-center">
+                <td className="flex justify-center items-center gap-4">
+                    <Badge content={coin.nominal.toString()} />
                     <h3>{coin.nominal} руб.</h3>
                 </td>
                 <td>
@@ -69,15 +71,20 @@ export default function Payment() {
             coins: coins.map(c => ({ nominal: c.nominal, quantity: c.quantity } as InsertedCoin)),
         };
         ordersApi.createOrder(model)
-            .then(_ => {
+            .then(change => {
+                localStorage.setItem('change', JSON.stringify(change));
                 navigate('/payment-success');
-            },);
+            })
+            .catch(_ => {
+                localStorage.setItem('change', '');
+                navigate('/payment-success');
+            });
     }
 
     return (
         <div className="flex flex-col overflow-auto">
-            <section className="section flex flex-col">
-                <h1 className="title">Оформление заказа</h1>
+            <section className="section container flex flex-col">
+                <h1 className="title">Оплата</h1>
             </section>
             <hr />
             <table className="table container">

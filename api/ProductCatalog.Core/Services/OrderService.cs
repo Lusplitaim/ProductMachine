@@ -1,4 +1,5 @@
 ﻿using ProductCatalog.Core.Data;
+using ProductCatalog.Core.DTOs.Coin;
 using ProductCatalog.Core.DTOs.Order;
 using ProductCatalog.Core.Exceptions;
 using ProductCatalog.Core.Models;
@@ -16,16 +17,18 @@ namespace ProductCatalog.Core.Services
             m_OrderStorage = orderStorage;
         }
 
-        public async Task<ExecResult> CreateAsync(CreateOrderDto model)
+        public async Task<ExecResult<IEnumerable<ChangeCoinDto>>> CreateAsync(CreateOrderDto model)
         {
             try
             {
-                var result = new ExecResult();
+                var result = new ExecResult<IEnumerable<ChangeCoinDto>>();
 
                 using var transaction = m_UnitOfWork.BeginTransaction();
 
                 var createResult = await m_OrderStorage.CreateAsync(model);
                 result.AddErrors(createResult);
+
+                result.Result = createResult.Result.Coins;
 
                 transaction.Commit();
 

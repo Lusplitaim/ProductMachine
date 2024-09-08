@@ -50,9 +50,9 @@ namespace ProductCatalog.Core.Storages.Managers
 
         private void AddInsertedCoins(IEnumerable<CoinEntity> entities, IEnumerable<InsertedCoinDto> insertedCoins)
         {
-            foreach (var entity in entities)
+            foreach (var insertedCoin in insertedCoins)
             {
-                var insertedCoin = insertedCoins.Single(p => p.Nominal == entity.Nominal);
+                var entity = entities.Single(p => p.Nominal == insertedCoin.Nominal);
                 entity.MaxQuantity += insertedCoin.Quantity;
             }
         }

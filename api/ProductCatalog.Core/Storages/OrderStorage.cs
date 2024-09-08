@@ -32,9 +32,9 @@ namespace ProductCatalog.Core.Storages
                 return result;
             }
 
-            var coinNominals = model.Coins.Select(c => c.Nominal).ToList();
-            var coins = await m_UnitOfWork.CoinRepository.GetAsync(coinNominals);
-            if (!coins.All(c => coinNominals.Contains(c.Nominal)))
+            var coins = await m_UnitOfWork.CoinRepository.GetAsync();
+            var coinNominals = coins.Select(c => c.Nominal).ToList();
+            if (!model.Coins.All(c => coinNominals.Contains(c.Nominal)))
             {
                 result.AddError("Some products do not exist");
                 return result;

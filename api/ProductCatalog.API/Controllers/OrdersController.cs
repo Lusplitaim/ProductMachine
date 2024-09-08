@@ -24,7 +24,7 @@ namespace ProductCatalog.API.Controllers
         public async Task<IActionResult> CreateOrder(CreateOrderDto model)
         {
             var result = await m_OrderService.CreateAsync(model);
-            return this.ResolveResult(result, () => Created(nameof(CreateOrder), null));
+            return this.ResolveResult(result, () => Created(nameof(CreateOrder), result.Result));
         }
     }
 }

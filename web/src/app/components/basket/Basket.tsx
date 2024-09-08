@@ -122,7 +122,7 @@ export default function Basket() {
 
     return (
         <div className="flex flex-col overflow-auto">
-            <section className="section flex flex-col">
+            <section className="section container flex flex-col">
                 <h1 className="title">Оформление заказа</h1>
             </section>
             <hr />

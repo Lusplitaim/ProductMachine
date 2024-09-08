@@ -2,8 +2,7 @@
 {
     public class ProductFilters
     {
-        public ICollection<int> Brands { get; set; } = [];
-        public double? MinPrice { get; set; }
-        public double? MaxPrice { get; set; }
+        public int? Brand { get; set; }
+        public int? MaxPrice { get; set; }
     }
 }

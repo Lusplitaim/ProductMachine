@@ -99,9 +99,9 @@ export default function Payment() {
                     <h3 className="self-end">Итоговая сумма: {totalSum}</h3>
                 </div>
                 <div className="flex">
-                    <button className="button is-warning" onClick={navigateBack}>Вернуться</button>
+                    <button className="button is-warning is-medium" onClick={navigateBack}>Вернуться</button>
                     <div className="mx-auto"></div>
-                    <button className="button is-success" disabled={totalSum > getInsertedSum()} onClick={createOrder}>Оплатить</button>
+                    <button className="button is-success is-medium" disabled={totalSum > getInsertedSum()} onClick={createOrder}>Оплатить</button>
                 </div>
             </div>
         </div>

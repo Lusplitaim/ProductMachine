@@ -94,9 +94,9 @@ export default function Basket() {
             <div className="flex flex-col h-24 container">
                 <h3 className="self-end">Итоговая сумма: {getTotalSum()}</h3>
                 <div className="flex">
-                    <button className="button is-warning" onClick={navigateBack}>Вернуться</button>
+                    <button className="button is-warning is-medium" onClick={navigateBack}>Вернуться</button>
                     <div className="mx-auto"></div>
-                    <button className="button is-success" disabled={getTotalSum() <= 0} onClick={navigateToPayment}>Оплата</button>
+                    <button className="button is-success is-medium" disabled={getTotalSum() <= 0} onClick={navigateToPayment}>Оплата</button>
                 </div>
             </div>
         </div>

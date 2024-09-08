@@ -17,13 +17,9 @@ namespace ProductCatalog.Infrastructure.Data.Repositories
         {
             IQueryable<ProductEntity> products = m_DbContext.Products.Include(p => p.Brand);
 
-            if (filters.Brands.Count() > 0)
+            if (filters.Brand is not null)
             {
-                products = products.Where(p => filters.Brands.Contains(p.Brand.Id));
-            }
-            if (filters.MinPrice is not null)
-            {
-                products = products.Where(p => p.Price >= filters.MinPrice);
+                products = products.Where(p => p.Brand.Id == filters.Brand);
             }
             if (filters.MaxPrice is not null)
             {

@@ -27,7 +27,7 @@ export default function ProductCard(props: { product: Product, selected: boolean
     }
 
     return (
-        <div className="card w-64">
+        <div className="card basis-1/5">
             <div className="card-image">
                 <figure className="image is-2by3">
                     <Image src="/coca-cola.jpeg" width={100} height={150} alt="image" />
